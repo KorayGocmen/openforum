@@ -31,7 +31,7 @@ router.get('/', async function (req,res,next) {
             }
         });
         if(user == null){
-            var errorMessage = ["User not found"];
+            var errorMessage = ["User not authorized or not found"];
             res.status(404).json({
                 success: false,
                 errors: errorMessage
@@ -78,7 +78,7 @@ router.get('/all', async function(req,res,next){
             }
         });
         if (user == null) {
-            var errorMessage = ["User not found"];
+            var errorMessage = ["User not authorized or not found"];
             res.status(404).json({
                 success: false,
                 errors: errorMessage
@@ -117,7 +117,7 @@ router.get('/:id_or_name', async function(req,res,next){
             }
         });
         if (user == null) {
-            var errorMessage = ["User not found"];
+            var errorMessage = ["User not authorized or not found"];
             res.status(404).json({
                 success: false,
                 errors: errorMessage

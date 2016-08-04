@@ -120,7 +120,7 @@ router.post('/logout', async function (req,res,next) {
         });
 
         if(user == null){
-            var errorMessage = ["User not authorized"];
+            var errorMessage = ["User not authorized or not found"];
             res.status(401).json({
                 success: false,
                 errors: errorMessage

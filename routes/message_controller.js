@@ -47,13 +47,23 @@ router.post('/', async function (req, res, next) {
 
         // Check if the message body is empty
         if((message_body==null || (message_body.length===0 || !message_body.trim()))){
-            var errorMessage = 'Message body cannot be empty';
+            var errorMessage = ['Message body cannot be empty'];
             res.status(422).json({
                 success: false,
                 errors: errorMessage
             });
             return
         }
+
+        if(message_type==null || (message_type.length===0 || !message_type.trim()) || !(message_type == 'channel' || message_type == 'personal')){
+            var errorMessage = ['Message type cannot be empty or different than \'personal\' or \'channel\''];
+            res.status(422).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+
 
         var sender_name = sender.dataValues.name;
         if(sender_name == null){
