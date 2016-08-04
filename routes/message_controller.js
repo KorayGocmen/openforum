@@ -112,7 +112,15 @@ router.post('/', async function (req, res, next) {
                 message_ids: message_ids
             });
             var sender_channels = sender.dataValues.channels;
-            if(!sender_channels.includes(receiver_name)){
+
+            var channelsInclude = false;
+            for(var i=0; i<sender_channels.length; i++){
+                if(sender_channels[i] == receiver_name){
+                    channelsInclude = true;
+                }
+            }
+
+            if(channelsInclude){
                 // not messaged to this channel before
                 sender_channels.push(receiver_name);
                 await sender.update({
