@@ -2,22 +2,22 @@
   "development": {
     "username": "koraygocmen",
     "password": "tk95961523",
-    "database": "jukebox_messaging_api",
+    "database": "openforum",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "jukebox_messaging_api",
+    "database": "openforum",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
-    "username": "gmdhdmxywprfcs",
-    "password": "r5ze6W2-squL7QET43mAebVftU",
-    "database": "dm8r768ur90kj",
-    "host": "ec2-54-243-204-221.compute-1.amazonaws.com",
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
     "dialect": "postgres"
   }
 }

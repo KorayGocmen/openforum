@@ -10,6 +10,7 @@ module.exports = {
             },
             message_body: {
                 type: Sequelize.STRING,
+                notEmpty: true,
                 allowNull: false
             },
             sender: {

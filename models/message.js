@@ -3,6 +3,7 @@ module.exports = function (sequelize, DataTypes) {
     var Message = sequelize.define('Message', {
         message_body: {
             type: DataTypes.STRING,
+            notEmpty: true,
             allowNull: false
         },
         sender: {

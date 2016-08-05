@@ -9,6 +9,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            contains:'@metu.edu.tr',
             validate: {
                 isEmail: true
             }
