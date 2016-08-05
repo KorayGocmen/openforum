@@ -8,16 +8,16 @@
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "tk95961523",
     "database": "openforum",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
-    "username": "",
-    "password": "",
-    "database": "",
-    "host": "",
+    "username": "erlecfufeoxbbr",
+    "password": "EbX8KIu0sX2PCSRLaG0XEiwB6g",
+    "database": "dfahtleu0miiic",
+    "host": "ec2-23-21-234-201.compute-1.amazonaws.com",
     "dialect": "postgres"
   }
 }
