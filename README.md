@@ -1,9 +1,9 @@
-# Jukebox Messaging API
-This is the official documentation for Jukebox Messaging API, developed on Node.js. This documentation includes schemas, tables and detailed examples of how to use the routes.
+# Open Forum API
+This is the official documentation for Open Forum API, developed on Node.js. This documentation includes schemas, tables and detailed examples of how to use the routes.
 
-Jukebox Messaging API is hosted on Heroku anc can be reached at (http://jukebox-messaging-api.herokuapp.com)
+Open Forum API is hosted on Heroku and can be reached at (https://open-forum-api.herokuapp.com/)
 
-Any changes will be noted in the changelof below.
+Any changes will be noted in the changelog below.
 
 This markdown file can be read in any markdown viewer such as  [Dillinger.io](http://dillinger.io/).
 
@@ -12,7 +12,7 @@ This section defines the models used inside the API. Explanations of the model a
 
 * **USER** - A user is anyone that can use the app. User's have: *auth_token/email/name/password/channels/admin*
 
-* **MESSAGE** - A message is a text send between two users. Every message belongs to a conversation.
+* **MESSAGE** - A message is a text send between two users or from a user to a channel.
 A message has: *message_body/sender/sender_id/receiver/receiver_id/message_type*.
  
 * **CHANNEL** - A channel is any public channel where all users are allowed to send messages. Every venue and event have a channel and any user can message to the channel. It is a "group chat" for any venue/event/etc.
@@ -44,6 +44,7 @@ Below we will detail the models listed above, and the available API endpoints fo
       email: {
           type: DataTypes.STRING,
           allowNull: false,
+          contains:'@metu.edu.tr',
           unique: true,
           validate: {
               isEmail: true
@@ -70,14 +71,13 @@ Below we will detail the models listed above, and the available API endpoints fo
 
 * **auth_token**: Authentication token, which will be used to access to different parts of the API, such as sending a message etc. Auth token will be generated after the user logs in and destroyed when user logs out.
 
-* **email**: Validates if it is not a real email address. There is no email verification at the moment. Can not be null and has to be unique.
+* **email**: Validates if it is not a real email address. There is no email verification at the moment. Can not be null, has to be unique and has to contain '@metu.edu.tr'.
 
 * **name**: User's name has to be unique.
 
 * **password**: Password can not be null and stored encrypted in the database.
 
 * **channels**: Channels is an array containing all the channel names, user messaged before.
-
 
 * **admin**: Default false, admins have access to some restricted parts of the API.
 
@@ -87,10 +87,10 @@ Below we will detail the models listed above, and the available API endpoints fo
 
 ###Usage:
 
-*[POST]* Request - **no auth_token needed**. http://jukebox-messaging-api.herokuapp.com/api/users
+*[POST]* Request - **no auth_token needed**. https://open-forum-api.herokuapp.com/api/users
 
 `
-curl -v -H "Content-type: application/json" -X POST jukebox-messaging-api.herokuapp.com/users/ -d '{"email":"test1@test.com", "name":"test1", "password":"123456"}'
+curl -v -H "Content-type: application/json" -X POST open-forum-api.herokuapp.com/users/ -d '{"email":"test1@test.com", "name":"test1", "password":"123456"}'
 `
 
 > This will create a user in the database. When creating a user you have to provide an email, a name and a password.
@@ -114,10 +114,10 @@ curl -v -H "Content-type: application/json" -X POST jukebox-messaging-api.heroku
 
 ###Usage:
 
-*POST* Request - **no auth_token needed**. http://jukebox-messaging-api.herokuapp.com/users/login
+*POST* Request - **no auth_token needed**. http://open-forum-api.herokuapp.com/users/login
 
 `
-curl -v -H "Content-type: application/json" -X POST jukebox-messaging-api.herokuapp.com/users/login -d '{"email":"test1@test.com", "password":"123456"}'
+curl -v -H "Content-type: application/json" -X POST open-forum-api.herokuapp.com/users/login -d '{"email":"test1@test.com", "password":"123456"}'
 `
 
 > This will log the user in and return the auth_token to access other parts of the API.
@@ -145,10 +145,10 @@ or
 
 ###Usage:
 
-*POST* Request - **auth_token needed**. http://jukebox-messaging-api.herokuapp.com/users/logout
+*POST* Request - **auth_token needed**. http://open-forum-api.herokuapp.com/users/logout
 
 `
-curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4xMzE0MDMzNjM1NDI2MzEyN30.cYWWtD3yLPUDKFmNcZ-EZScFljxySxlRJjJR_Zpr_Go" -X POST jukebox-messaging-api.herokuapp.com/users/logout -d ''
+curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4xMzE0MDMzNjM1NDI2MzEyN30.cYWWtD3yLPUDKFmNcZ-EZScFljxySxlRJjJR_Zpr_Go" -X POST open-forum-api.herokuapp.com/users/logout -d ''
 `
 
 > Logout a user. Destroy his auth_token
@@ -213,10 +213,10 @@ curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*POST* Request. **auth_token needed** http://jukebox-messaging-api.herokuapp.com/messages
+*POST* Request. **auth_token needed** http://open-forum-api.herokuapp.com/messages
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X POST "http://jukebox-messaging-api.herokuapp.com/messages" -d '{"receiver_name":"ACE", "message_body":"This is a second message","message_type":"channel"}'                                                                                                                                                                                                                                                            
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X POST "http://open-forum-api.herokuapp.com/messages" -d '{"receiver_name":"ACE", "message_body":"This is a second message","message_type":"channel"}'                                                                                                                                                                                                                                                            
 `
 
 > Send a message. message_body, receiver_name and message_type can not be null. This call creates a new channel if it doesn't exist. If a channel does exist, new message is added to the channel
@@ -279,10 +279,10 @@ or
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://jukebox-messaging-api.herokuapp.com/channels
+*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://jukebox-messaging-api.herokuapp.com/channels"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels"                                                                                                                                 
 `
 
 > Get all the channels user has messaged before
@@ -306,10 +306,10 @@ curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://jukebox-messaging-api.herokuapp.com/channels/all
+*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels/all
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://jukebox-messaging-api.herokuapp.com/channels/all"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/all"                                                                                                                                 
 `
 
 > Get all the channels. Only returns the names of all available channels. This route is designed to only show the names of the channels
@@ -333,14 +333,14 @@ curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://jukebox-messaging-api.herokuapp.com/channels/:id_or_name
+*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels/:id_or_name
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://jukebox-messaging-api.herokuapp.com/channels/ACE"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/ACE"                                                                                                                                 
 `
 or
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://jukebox-messaging-api.herokuapp.com/channels/1" 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/1" 
 `
 
 > Get a channel with it's name or it's id. In the messages array of the response: first index = Sender Name(or email if they didn't provide a name), second index = Message Body
