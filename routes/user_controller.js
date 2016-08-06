@@ -6,6 +6,7 @@ var jwt         = require('jwt-simple');
 var secrets     = require('../secrets');
 var babel       = require('babel-register');
 var babelNode   = require('babel-preset-node5');
+var nodemailer  = require("nodemailer");
 
 var connectionString;
 if (process.env.NODE_ENV === 'production'){
@@ -24,19 +25,110 @@ var User = sequelize.import('../models/user');
 router.post('/', async function(req,res,next) {
     try{
         var plainPassword = req.body.password;
+        var user_email = req.body.email;
+        var user_name = req.body.name;
         var encryptedPassword = bcrypt.hashSync(plainPassword, 10);
+        var verification_id = Math.floor(Math.random() * 100000000000000000) + 1000000;
+
+        //Verification email authorization
+        var smtpTransport = nodemailer.createTransport("SMTP",{
+            service: "gmail",
+            secure: true,
+            auth: {
+                user: "openforumapp@gmail.com",
+                pass: "tk95961523"
+            }
+        });
 
         const createdUser = await User.create({
-            email: req.body.email,
-            name: req.body.name,
+            email: user_email,
+            name: user_name,
             password: encryptedPassword,
-            admin: false
+            admin: false,
+            verified: false,
+            verification_id: verification_id
+        });
+
+        // Send verification email
+        var link = 'https://open-forum-api.herokuapp.com/users/verify/' + verification_id + '/' + user_email;
+
+        var mailOptions={
+            to : user_email,
+            from: "openforumapp@gmail.com",
+            subject : "Email Adresinizi Dogrulayin",
+            html : "Merhaba,<br> Open Forum'a kayit oldugunuz icin tesekkur ederiz. Biz kim miyiz? Biz iletisimin onemine inanan ve kod yazmayi seven iki universite ogrencisiyiz. Senin de bizim gibi dusunmene cok sevindik. Asagidaki linki tiklayarak hemen konusmaya baslayabilirsin. Unutmadan, emailine asla spam gondermeyecegimiz, icini ferah tut.<br><a href="+link+">Emailini dogrulamak icin tikla </a>"
+        };
+
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Message sent: " + response.message);
+            }
         });
 
         var newUser = createdUser.dataValues;
         res.status(201).json({
             success: true,
             user: newUser
+        });
+
+    }catch(err){
+        console.log(chalk.red(err));
+        var errorsMessageArray = [];
+        for(var i=0; i<err.errors.length; i++){
+            errorsMessageArray.push(err.errors[i].message);
+        }
+        res.status(422).json({
+            success: false,
+            errors: errorsMessageArray
+        });
+    }
+});
+
+// Verify user email
+router.get('/verify/:verification_id/:user_email', async function(req,res,next){
+    try{
+        var verification_id = req.params.verification_id;
+        var user_email = req.params.user_email;
+
+        var user = await User.findOne({
+            where:{
+                email: user_email
+            }
+        });
+
+        if(user == null){
+            var errorMessage = ["User not found"];
+            res.status(404).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+
+        if(user.dataValues.verification_id != verification_id){
+            // Someone is trying to hack
+            // Change user's verification_id
+            var new_verification_id = Math.floor(Math.random() * 100000000000000000) + 1000000;
+            await user.update({
+                verification_id: new_verification_id
+            });
+            var errorMessage = ["User email and verification does not match"];
+            res.status(401).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+
+        // All good. Verify the user
+        await user.update({
+            verified: true
+        });
+
+        res.status(200).json({
+            success:true
         });
 
     }catch(err){

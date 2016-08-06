@@ -18,6 +18,8 @@
     "jsonwebtoken": "^7.1.7",
     "jwt-simple": "^0.5.0",
     "morgan": "~1.7.0",
+    "nodemailer": "~0.7.1",
+    "nodemailer-smtp-transport": "~1.0.3",
     "pg": "^6.0.3",
     "sequelize": "^3.23.6",
     "sequelize-cli": "^2.4.0",

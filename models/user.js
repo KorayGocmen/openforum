@@ -9,7 +9,6 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-            contains:'@metu.edu.tr',
             validate: {
                 isEmail: true
             }
@@ -29,6 +28,15 @@ module.exports = function (sequelize, DataTypes) {
         admin: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        verified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        verification_id: {
+            type: DataTypes.DOUBLE,
+            allowNull: false,
+            defaultValue: 0
         }
     });
     return User;

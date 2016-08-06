@@ -69,6 +69,7 @@ router.get('/', async function (req,res,next) {
     }
 });
 
+// Get all the channels
 router.get('/all', async function(req,res,next){
     try {
         var auth_token = req.get("Authorization");
@@ -108,6 +109,7 @@ router.get('/all', async function(req,res,next){
     }
 });
 
+// Get channel with specific id or name
 router.get('/:id_or_name', async function(req,res,next){
     try {
         var auth_token = req.get("Authorization");
