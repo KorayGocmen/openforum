@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
             defaultValue: false
         },
         verification_id: {
-            type: DataTypes.DOUBLE,
+            type: DataTypes.STRING,
             allowNull: false,
             defaultValue: 0
         }

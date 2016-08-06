@@ -35,10 +35,17 @@ router.post('/', async function (req, res, next) {
                 auth_token: auth_token
             }
         });
-
         if(sender == null){
             var errorMessage = ["User not authorized or not found"];
             res.status(401).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+        if(!sender.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
                 success: false,
                 errors: errorMessage
             });

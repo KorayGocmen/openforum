@@ -30,6 +30,7 @@ router.post('/', async function(req,res,next) {
         var user_name = req.body.name;
         var encryptedPassword = bcrypt.hashSync(plainPassword, 10);
         var verification_id = Math.floor(Math.random() * 100000000000000000) + 1000000;
+        var verification_id_string = verification_id.toString();
 
         //Verification email authorization
         var smtpTransport = nodemailer.createTransport("SMTP",{
@@ -47,7 +48,7 @@ router.post('/', async function(req,res,next) {
             password: encryptedPassword,
             admin: false,
             verified: false,
-            verification_id: verification_id
+            verification_id: verification_id_string
         });
 
         // Send verification email
@@ -158,10 +159,17 @@ router.post('/login', async function (req, res, next) {
                 email: email
             }
         });
-
         if(user == null){
             var errorMessage = ["User not found"];
             res.status(404).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+        if(!user.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
                 success: false,
                 errors: errorMessage
             });
@@ -222,6 +230,15 @@ router.post('/logout', async function (req,res,next) {
             });
             return
         }
+        if(!user.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+
         await user.update({
             auth_token: ""
         });

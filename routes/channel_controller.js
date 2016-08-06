@@ -38,6 +38,14 @@ router.get('/', async function (req,res,next) {
             });
             return
         }
+        if(!user.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
 
         var user_channels = user.dataValues.channels;
         var channelMessages = [];
@@ -86,6 +94,14 @@ router.get('/all', async function(req,res,next){
             });
             return
         }
+        if(!user.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
 
         const allChannels = await Channel.findAll({
             attributes: [['id','channel_id'], ['name','channel_name']]
@@ -121,6 +137,14 @@ router.get('/:id_or_name', async function(req,res,next){
         if (user == null) {
             var errorMessage = ["User not authorized or not found"];
             res.status(404).json({
+                success: false,
+                errors: errorMessage
+            });
+            return
+        }
+        if(!user.dataValues.verified){
+            var errorMessage = ["User email is not verified"];
+            res.status(412).json({
                 success: false,
                 errors: errorMessage
             });
