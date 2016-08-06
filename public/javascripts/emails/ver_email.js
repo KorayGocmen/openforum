@@ -157,8 +157,6 @@ strVar2 += "<\/table>";
 strVar2 += "<\/body>";
 strVar2 += "<\/html>";
 
-
-
 module.exports = {
     strVar1: strVar1,
     strVar2: strVar2

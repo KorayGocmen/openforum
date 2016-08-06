@@ -121,11 +121,9 @@ router.get('/verify/:verification_id/:user_email', async function(req,res,next){
             await user.update({
                 verification_id: new_verification_id
             });
-            var errorMessage = ["User email and verification does not match"];
-            res.status(401).json({
-                success: false,
-                errors: errorMessage
-            });
+            res.status(401).json(
+                'Bir seyler ters gitti, email dogrulamasi basarisiz'
+            );
             return
         }
 
