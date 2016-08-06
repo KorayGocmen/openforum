@@ -6,7 +6,8 @@ var jwt         = require('jwt-simple');
 var secrets     = require('../secrets');
 var babel       = require('babel-register');
 var babelNode   = require('babel-preset-node5');
-var nodemailer  = require("nodemailer");
+var nodemailer  = require('nodemailer');
+var ver_email   = require('../public/javascripts/emails/ver_email');
 
 var connectionString;
 if (process.env.NODE_ENV === 'production'){
@@ -50,13 +51,19 @@ router.post('/', async function(req,res,next) {
         });
 
         // Send verification email
-        var link = 'https://open-forum-api.herokuapp.com/users/verify/' + verification_id + '/' + user_email;
+        var link;
+        if (process.env.NODE_ENV === 'production'){
+            link = 'https://open-forum-api.herokuapp.com/users/verify/' + verification_id + '/' + user_email;
+        }else{
+            link = 'http://localhost:3000/users/verify/' + verification_id + '/' + user_email;
+        }
 
+        var email = ver_email.strVar1 + link + ver_email.strVar2;
         var mailOptions={
             to : user_email,
             from: "openforumapp@gmail.com",
-            subject : "Email Adresinizi Dogrulayin",
-            html : "Merhaba,<br> Open Forum'a kayit oldugunuz icin tesekkur ederiz. Biz kim miyiz? Biz iletisimin onemine inanan ve kod yazmayi seven iki universite ogrencisiyiz. Senin de bizim gibi dusunmene cok sevindik. Asagidaki linki tiklayarak hemen konusmaya baslayabilirsin. Unutmadan, emailine asla spam gondermeyecegimiz, icini ferah tut.<br><a href="+link+">Emailini dogrulamak icin tikla </a>"
+            subject : "Verify your email address",
+            html : email
         };
 
         smtpTransport.sendMail(mailOptions, function(error, response){
@@ -127,9 +134,7 @@ router.get('/verify/:verification_id/:user_email', async function(req,res,next){
             verified: true
         });
 
-        res.status(200).json({
-            success:true
-        });
+        res.status(200).json('Emailinizi dogruladiginiz icin tesekkurler!');
 
     }catch(err){
         console.log(chalk.red(err));
