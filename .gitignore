@@ -10,3 +10,7 @@
 .idea/workspace.xml
 
 .idea/workspace.xml
+.DS_Store
+node_modules/umzug/.idea/libraries/
+public/.DS_Store
+public/images/.DS_Store

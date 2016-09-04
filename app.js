@@ -7,7 +7,7 @@ var bodyParser      = require('body-parser');
 var Sequelize       = require('sequelize');
 var db              = require('sequelize-connect');
 var chalk           = require('chalk');
-var secrets         = require('./secrets');
+var Config          = require('./config/config.json');
 
 // Route Requirements
 var routes_controller    = require('./routes/index_controller');
@@ -21,15 +21,15 @@ var username;
 var password;
 var database;
 if (process.env.NODE_ENV === 'production'){
-    connectionString = global.productionConnectionString;
-    database = global.nameDatabase_production;
-    username = global.usernameDatabase_production;
-    password = global.passwordDatabase_production;
+  connectionString = Config.productionConnectionString;
+  database = Config.production.database;
+  username = Config.production.username;
+  password = Config.production.password;
 }else{
-    connectionString = global.localConnectionString;
-    database = global.nameDatabase_development;
-    username = global.usernameDatabase_development;
-    password = global.passwordDatabase_development;
+  connectionString = Config.localConnectionString;
+  database = Config.production.database;
+  username = Config.production.username;
+  password = Config.production.password;
 }
 try {
     var sequelize = new Sequelize(connectionString);

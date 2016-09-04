@@ -101,7 +101,7 @@ strVar1 += "                                   style=\"font-family:'Helvetica Ne
 strVar1 += "                                <tr style=\"font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;box-sizing:border-box;font-size:14px;margin:0\">";
 strVar1 += "                                    <td class=\"content-block\"";
 strVar1 += "                                        style=\"font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;box-sizing:border-box;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px\"";
-strVar1 += "                                        valign=\"top\"> Hey there!<br><br> Thank you for joining Open Forum. Who are we?";
+strVar1 += "                                        valign=\"top\"> Hey there!<br><br> This is Koray from Open Forum.<br><br> Thank you for joining. Who are we?";
 strVar1 += "                                        We are two university students who believe in free exchange of ideas and";
 strVar1 += "                                        knowledge, who also happen to love writing code.";
 strVar1 += "                                    <\/td>";

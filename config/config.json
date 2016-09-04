@@ -1,23 +1,34 @@
 {
   "development": {
-    "username": "koraygocmen",
-    "password": "tk95961523",
-    "database": "openforum",
+    "username": "",
+    "password": "",
+    "database": "",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": "tk95961523",
-    "database": "openforum",
+    "username": "",
+    "password": "",
+    "database": "",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
-    "username": "erlecfufeoxbbr",
-    "password": "EbX8KIu0sX2PCSRLaG0XEiwB6g",
-    "database": "dfahtleu0miiic",
-    "host": "ec2-23-21-234-201.compute-1.amazonaws.com",
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
     "dialect": "postgres"
-  }
+  },
+  "jwtTokenSecret": "",
+  "localConnectionString": "",
+  "productionConnectionString": "",
+
+  "email": {
+    "service": "gmail",
+    "user": "...@gmail.com",
+    "password": "password"
+  },
+
+  "host": "https://...herokuapp.com"
 }

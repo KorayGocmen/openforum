@@ -1,19 +1,24 @@
+/*
+* Developed by Koray Gocmen,
+* August, 2016
+* */
+
 var express     = require('express');
 var Sequelize   = require('sequelize');
 var chalk       = require('chalk');
 var bcrypt      = require('bcrypt');
 var jwt         = require('jwt-simple');
-var secrets     = require('../secrets');
 var babel       = require('babel-register');
 var babelNode   = require('babel-preset-node5');
 var nodemailer  = require('nodemailer');
 var ver_email   = require('../public/javascripts/emails/ver_email');
+var Config      = require('../config/config.json');
 
 var connectionString;
 if (process.env.NODE_ENV === 'production'){
-  connectionString = global.productionConnectionString;
+    connectionString = Config.productionConnectionString;
 }else{
-  connectionString = global.localConnectionString;
+    connectionString = Config.localConnectionString;
 }
 var sequelize = new Sequelize(connectionString);
 var app = express();
@@ -29,16 +34,15 @@ router.post('/', async function(req,res,next) {
         var user_email = req.body.email;
         var user_name = req.body.name;
         var encryptedPassword = bcrypt.hashSync(plainPassword, 10);
-        var verification_id = Math.floor(Math.random() * 100000000000000000) + 1000000;
-        var verification_id_string = verification_id.toString();
+        var verification_id_string = Math.random().toString(18).substring(2);
 
         //Verification email authorization
         var smtpTransport = nodemailer.createTransport("SMTP",{
-            service: "gmail",
+            service: Config.email.service,
             secure: true,
             auth: {
-                user: "openforumapp@gmail.com",
-                pass: "tk95961523"
+                user: Config.email.user,
+                pass: Config.email.password
             }
         });
 
@@ -54,15 +58,15 @@ router.post('/', async function(req,res,next) {
         // Send verification email
         var link;
         if (process.env.NODE_ENV === 'production'){
-            link = 'https://open-forum-api.herokuapp.com/users/verify/' + verification_id + '/' + user_email;
+            link = Config.host + '/users/verify/' + createdUser.dataValues.verification_id + '/' + user_email;
         }else{
-            link = 'http://localhost:3000/users/verify/' + verification_id + '/' + user_email;
+            link = 'http://localhost:3000/users/verify/' + createdUser.dataValues.verification_id + '/' + user_email;
         }
 
         var email = ver_email.strVar1 + link + ver_email.strVar2;
         var mailOptions={
             to : user_email,
-            from: "openforumapp@gmail.com",
+            from: Config.email.user,
             subject : "Verify your email address",
             html : email
         };
@@ -118,13 +122,11 @@ router.get('/verify/:verification_id/:user_email', async function(req,res,next){
         if(user.dataValues.verification_id != verification_id){
             // Someone is trying to hack
             // Change user's verification_id
-            var new_verification_id = Math.floor(Math.random() * 100000000000000000) + 1000000;
+            var new_verification_id = Math.random().toString(18).substring(2);
             await user.update({
                 verification_id: new_verification_id
             });
-            res.status(401).json(
-                'Bir seyler ters gitti, email dogrulamasi basarisiz'
-            );
+            res.render('email_verification', {message: 'Something went wrong. Email verification failed.'});
             return
         }
 
@@ -133,7 +135,7 @@ router.get('/verify/:verification_id/:user_email', async function(req,res,next){
             verified: true
         });
 
-        res.status(200).json('Emailinizi dogruladiginiz icin tesekkurler!');
+        res.render('email_verification', {message: 'Thank you for verifying your email!'});
 
     }catch(err){
         console.log(chalk.red(err));

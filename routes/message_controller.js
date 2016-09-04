@@ -1,17 +1,22 @@
+/*
+ * Developed by Koray Gocmen,
+ * August, 2016
+ * */
+
 var express = require('express');
 var Sequelize = require('sequelize');
 var chalk = require('chalk');
 var bcrypt = require('bcrypt');
 var jwt = require('jwt-simple');
-var secrets = require('../secrets');
 var babel = require('babel-register');
 var babelNode = require('babel-preset-node5');
+var Config      = require('../config/config.json');
 
 var connectionString;
-if (process.env.NODE_ENV === 'production') {
-    connectionString = global.productionConnectionString;
-} else {
-    connectionString = global.localConnectionString;
+if (process.env.NODE_ENV === 'production'){
+    connectionString = Config.productionConnectionString;
+}else{
+    connectionString = Config.localConnectionString;
 }
 var sequelize = new Sequelize(connectionString);
 var app = express();
