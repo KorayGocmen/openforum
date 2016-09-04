@@ -50,7 +50,6 @@ Below we will detail the models listed above, and the available API endpoints fo
       email: {
           type: DataTypes.STRING,
           allowNull: false,
-          contains:'@metu.edu.tr',
           unique: true,
           validate: {
               isEmail: true
@@ -77,7 +76,7 @@ Below we will detail the models listed above, and the available API endpoints fo
 
 * **auth_token**: Authentication token, which will be used to access to different parts of the API, such as sending a message etc. Auth token will be generated after the user logs in and destroyed when user logs out.
 
-* **email**: Validates if it is not a real email address. There is no email verification at the moment. Can not be null, has to be unique and has to contain '@metu.edu.tr'.
+* **email**: Validates if it is not a real email address. There is no email verification at the moment. Can not be null.
 
 * **name**: User's name has to be unique.
 
@@ -93,10 +92,10 @@ Below we will detail the models listed above, and the available API endpoints fo
 
 ###Usage:
 
-*[POST]* Request - **no auth_token needed**. https://open-forum-api.herokuapp.com/api/users
+*[POST]* Request - **no auth_token needed**. https://your-end-point.com/api/users
 
 `
-curl -v -H "Content-type: application/json" -X POST open-forum-api.herokuapp.com/users/ -d '{"email":"test1@test.com", "name":"test1", "password":"123456"}'
+curl -v -H "Content-type: application/json" -X POST your-end-point.com/users/ -d '{"email":"test1@test.com", "name":"test1", "password":"123456"}'
 `
 
 > This will create a user in the database. When creating a user you have to provide an email, a name and a password.
@@ -120,10 +119,10 @@ curl -v -H "Content-type: application/json" -X POST open-forum-api.herokuapp.com
 
 ###Usage:
 
-*POST* Request - **no auth_token needed**. http://open-forum-api.herokuapp.com/users/login
+*POST* Request - **no auth_token needed**. http://your-end-point.com/users/login
 
 `
-curl -v -H "Content-type: application/json" -X POST open-forum-api.herokuapp.com/users/login -d '{"email":"test1@test.com", "password":"123456"}'
+curl -v -H "Content-type: application/json" -X POST your-end-point.com/users/login -d '{"email":"test1@test.com", "password":"123456"}'
 `
 
 > This will log the user in and return the auth_token to access other parts of the API.
@@ -151,10 +150,10 @@ or
 
 ###Usage:
 
-*POST* Request - **auth_token needed**. http://open-forum-api.herokuapp.com/users/logout
+*POST* Request - **auth_token needed**. http://your-end-point.com/users/logout
 
 `
-curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4xMzE0MDMzNjM1NDI2MzEyN30.cYWWtD3yLPUDKFmNcZ-EZScFljxySxlRJjJR_Zpr_Go" -X POST open-forum-api.herokuapp.com/users/logout -d ''
+curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4xMzE0MDMzNjM1NDI2MzEyN30.cYWWtD3yLPUDKFmNcZ-EZScFljxySxlRJjJR_Zpr_Go" -X POST your-end-point.com/users/logout -d ''
 `
 
 > Logout a user. Destroy his auth_token
@@ -219,10 +218,10 @@ curl -v -H "Content-type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*POST* Request. **auth_token needed** http://open-forum-api.herokuapp.com/messages
+*POST* Request. **auth_token needed** http://your-end-point.com/messages
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X POST "http://open-forum-api.herokuapp.com/messages" -d '{"receiver_name":"ACE", "message_body":"This is a second message","message_type":"channel"}'                                                                                                                                                                                                                                                            
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X POST "http://your-end-point.com/messages" -d '{"receiver_name":"ACE", "message_body":"This is a second message","message_type":"channel"}'                                                                                                                                                                                                                                                            
 `
 
 > Send a message. message_body, receiver_name and message_type can not be null. This call creates a new channel if it doesn't exist. If a channel does exist, new message is added to the channel
@@ -285,10 +284,10 @@ or
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels
+*GET* Request. **auth_token needed** http://your-end-point.com/channels
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://your-end-point.com/channels"                                                                                                                                 
 `
 
 > Get all the channels user has messaged before
@@ -312,10 +311,10 @@ curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels/all
+*GET* Request. **auth_token needed** http://your-end-point.com/channels/all
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/all"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://your-end-point.com/channels/all"                                                                                                                                 
 `
 
 > Get all the channels. Only returns the names of all available channels. This route is designed to only show the names of the channels
@@ -339,14 +338,14 @@ curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiL
 
 ###Usage:
 
-*GET* Request. **auth_token needed** http://open-forum-api.herokuapp.com/channels/:id_or_name
+*GET* Request. **auth_token needed** http://your-end-point.com/channels/:id_or_name
 
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/ACE"                                                                                                                                 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://your-end-point.com/channels/ACE"                                                                                                                                 
 `
 or
 `
-curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://open-forum-api.herokuapp.com/channels/1" 
+curl -v -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImp0aSI6MC4yNDYyNzEyNDQwMTc0MDczfQ.nF7KW2fAK8QZPbuDeS1aVp4__2zZnFfROkFjEXNeBp8" -X GET "http://your-end-point.com/channels/1" 
 `
 
 > Get a channel with it's name or it's id. In the messages array of the response: first index = Sender Name(or email if they didn't provide a name), second index = Message Body
