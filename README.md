@@ -7,7 +7,7 @@
 
 This is the official documentation for Open Forum API, developed on Node.js. This documentation includes schemas, tables and detailed examples of how to use the routes.
 
-Open Forum API is hosted on Heroku and can be reached at (https://open-forum-api.herokuapp.com/)
+Open Forum API is hosted on Heroku and can be reached at (*end point here*)
 
 Any changes will be noted in the changelog below.
 
